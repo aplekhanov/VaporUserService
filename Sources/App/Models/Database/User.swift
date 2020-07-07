@@ -13,23 +13,25 @@ final class User: Model {
         self.lastname = lastName
         self.password = try BCryptDigest().hash(password)
     }
+    
+    struct FieldKeys {
+        static var firstname:   FieldKey { "firstname" }
+        static var lastname:    FieldKey { "lastname" }
+        static var email:       FieldKey { "email" }
+        static var password:    FieldKey { "password" }
+        static var createdAt:   FieldKey { "createdAt" }
+        static var updatedAt:   FieldKey { "updatedAt" }
+        static var deletedAt:   FieldKey { "deletedAt" }
+    }
 
-    @ID(key: "id")
-    var id: UUID?
+    @ID() var id: UUID?
 
-    @Field(key: "firstname")
-    var firstname: String?
-    @Field(key: "lastname")
-    var lastname: String?
-    @Field(key: "email")
-    var email: String
-    @Field(key: "password")
-    var password: String
+    @Field(key: FieldKeys.firstname)    var firstname: String?
+    @Field(key: FieldKeys.lastname)     var lastname: String?
+    @Field(key: FieldKeys.email)        var email: String
+    @Field(key: FieldKeys.password)     var password: String
 
-    @Timestamp(key: "createdAt", on: .create)
-    var createdAt: Date?
-    @Timestamp(key: "updatedAt", on: .update)
-    var updatedAt: Date?
-    @Timestamp(key: "deletedAt", on: .delete)
-    var deletedAt: Date?
+    @Timestamp(key: FieldKeys.createdAt, on: .create) var createdAt: Date?
+    @Timestamp(key: FieldKeys.updatedAt, on: .update) var updatedAt: Date?
+    @Timestamp(key: FieldKeys.deletedAt, on: .delete) var deletedAt: Date?
 }
