@@ -7,4 +7,6 @@ func routes(_ app: Application) throws {
     let auth = root.grouped(SimpleJWTMiddleware())
     
     root.get("health") { request in return "OK" }
+    
+    try root.register(collection: AuthController())
 }

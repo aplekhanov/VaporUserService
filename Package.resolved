@@ -84,11 +84,11 @@
       },
       {
         "package": "SimpleJWTMiddleware",
-        "repositoryURL": "https://github.com/proggeramlug/SimpleJWTMiddleware",
+        "repositoryURL": "https://github.com/aplekhanov/SimpleJWTMiddleware.git",
         "state": {
           "branch": null,
-          "revision": "1a70c046eb17a64ac68536cce3081335aea0ec9d",
-          "version": "1.0.3"
+          "revision": "5a1c69c35a7a5b91b3fa99a4869edff4547065d0",
+          "version": "1.0.2"
         }
       },
       {
