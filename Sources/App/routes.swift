@@ -9,4 +9,5 @@ func routes(_ app: Application) throws {
     root.get("health") { request in return "OK" }
     
     try root.register(collection: AuthController())
+    try auth.register(collection: UsersController())
 }
