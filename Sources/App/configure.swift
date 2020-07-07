@@ -1,5 +1,5 @@
 import Vapor
-import JWT
+import SimpleJWTMiddleware
 
 // configures your application
 public func configure(_ app: Application) throws {
