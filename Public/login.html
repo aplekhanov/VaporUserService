@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Welcome on board!</title>
+</head>
+<body>
+    <h1 class="d-flex justify-content-center" >User Service Login</h1>
+    <div class="container">
+        <form id="login">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="" class="form-control">
+            </div>
+             <input type="submit" class="btn btn-primary" value="Submit">
+         </form>
+    </div>
+
+    <script>
+
+        let loginForm = document.getElementById("login")
+        loginForm.addEventListener("submit", login);
+
+        function login(event) {
+
+            event.preventDefault();
+            
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            
+            fetch('/api/users/login', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({email, password})
+            })
+            .then(checkError)
+            .then(res => res.json())
+            .then(processData)
+            .catch(handleError)
+        }
+
+        function checkError(res) {
+            if (!res.ok) throw new Error(res.statusText);
+            return res;
+        }
+
+        function handleError(message) {
+            loginForm.reset();
+            let alert = document.createElement('div');
+            alert.className = 'alert alert-warning mt-4';
+            alert.setAttribute('role', 'alert');
+            alert.textContent = message;
+            loginForm.appendChild(alert);
+        }
+
+        function processData(json) {
+             // save credentials into local storage
+            localStorage.setItem('credentials', JSON.stringify(json));
+        }
+    </script>
+</body>
+</html>
