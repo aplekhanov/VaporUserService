@@ -65,6 +65,7 @@
         function processData(json) {
              // save credentials into local storage
             localStorage.setItem('credentials', JSON.stringify(json));
+            location.replace('/profile.html');
         }
     </script>
 </body>

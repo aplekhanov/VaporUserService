@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Welcome on board!</title>
+</head>
+
+<body>
+    <h1 class="d-flex justify-content-center">User Service Profile</h1>
+    <div class="container">
+        <form id="profile">
+            <div class="form-group">
+                <label for="firstname">Firstname:</label>
+                <input type="text" id="firstname" name="firstname" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Lastname:</label>
+                <input type="text" id="lastname" name="lastname" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="" class="form-control" readonly>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Update">
+        </form>
+    </div>
+
+    <script>
+
+        let profileForm = document.getElementById("profile");
+        let firstnameInput = document.getElementById('firstname');
+        let lastnameInput = document.getElementById('lastname');
+        let emailInput = document.getElementById('email');
+
+        window.onload = function getProfile(event) {
+
+            let credentials = JSON.parse(localStorage.getItem('credentials'));
+
+            if (credentials != null) {
+                firstnameInput.value = credentials.user.firstname;
+                lastnameInput.value = credentials.user.lastname;
+                email.value = credentials.user.email;
+            } else {
+                console.log('No credentials');
+                location.replace('/login.html');
+            }
+        }
+
+        profileForm.addEventListener('submit', update);
+
+        function update(event) {
+
+            event.preventDefault();
+
+            let firstname = document.getElementById('firstname').value;
+            let lastname = document.getElementById('lastname').value;
+            let credentials = JSON.parse(localStorage.getItem('credentials'));
+            let token = credentials.accessToken;
+            let jsonBody = JSON.stringify({ firstname, lastname });
+    
+            fetch('/api/users/profile', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: jsonBody
+            })
+                .then(res => res.json())
+                .then(checkError)
+                .then(processData)
+                .catch(handleError)
+        }
+
+        function checkError(res) {
+            if (res.status !== 'success') throw new Error(res.reason);
+            return res;
+        }
+
+        function handleError(message) {
+            let alert = document.createElement('div');
+            alert.className = 'alert alert-warning mt-4';
+            alert.setAttribute('role', 'alert');
+            alert.textContent = message;
+            profileForm.appendChild(alert);
+        }
+
+        function processData(json) {
+            localStorage.setItem('credentials', JSON.stringify(json));
+            location.reload();
+        }
+
+    </script>
+</body>
+
+</html>
