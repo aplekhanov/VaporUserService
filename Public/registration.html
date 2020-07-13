@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Welcome on board!</title>
+</head>
+<body>
+    <h1 class="d-flex justify-content-center" >User Service Registration</h1>
+    <div class="container">
+        <form id="register">
+            <div class="form-group">
+                <label for="firstname">Firstname:</label>
+                <input type="text" id="firstname" name="firstname" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Lastname:</label>
+                <input type="text" id="lastname" name="lastname" value="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="" class="form-control" required>
+            </div>
+             <input type="submit" class="btn btn-primary" value="Submit">
+         </form>
+    </div>
+
+    <script>
+
+        let registerForm = document.getElementById("register");
+        registerForm.addEventListener("submit", register);
+
+        function register(event) {
+
+            event.preventDefault();
+            
+            let firstname = document.getElementById('firstname').value;
+            let lastname = document.getElementById('lastname').value;
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            let jsonBody = JSON.stringify({firstname, lastname, email, password});
+            fetch('/api/users/register', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-type': 'application/json'
+                },
+                body: jsonBody
+            })
+            .then(res => res.json())
+            .then(checkError)
+            .then(processData)
+            .catch(handleError)
+        }
+
+        function checkError(res) {
+            if (!res.ok) throw new Error(res.reason);
+            return res;
+        }
+
+        function handleError(message) {
+            registerForm.reset();
+            let alert = document.createElement('div');
+            alert.className = 'alert alert-warning mt-4';
+            alert.setAttribute('role', 'alert');
+            alert.textContent = message;
+            registerForm.appendChild(alert);
+        }
+
+    </script>
+</body>
+</html>
