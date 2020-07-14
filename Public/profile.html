@@ -27,6 +27,9 @@
             </div>
             <input type="submit" class="btn btn-primary" value="Update">
         </form>
+        <div class="text-center">
+            <a href="/login.html" id="logout">Logout</a>
+        </div>
     </div>
 
     <script>
@@ -38,12 +41,12 @@
 
         window.onload = function getProfile(event) {
 
-            let credentials = JSON.parse(localStorage.getItem('credentials'));
+            let user = JSON.parse(sessionStorage.getItem('user'));
 
-            if (credentials != null) {
-                firstnameInput.value = credentials.user.firstname;
-                lastnameInput.value = credentials.user.lastname;
-                email.value = credentials.user.email;
+            if (user != null) {
+                firstnameInput.value = user.firstname;
+                lastnameInput.value = user.lastname;
+                email.value = user.email;
             } else {
                 console.log('No credentials');
                 location.replace('/login.html');
@@ -91,7 +94,18 @@
         }
 
         function processData(json) {
-            localStorage.setItem('credentials', JSON.stringify(json));
+            sessionStorage.setItem('user', JSON.stringify(json.user));
+            let alert = document.createElement('div');
+            alert.className = 'alert alert-primary mt-4';
+            alert.setAttribute('role', 'alert');
+            alert.textContent = 'Profile was updated';
+            profileForm.appendChild(alert);
+        }
+
+        let logoutLink = document.getElementById('logout');
+        logoutLink.onclick = function() {
+            sessionStorage.clear();
+            localStorage.clear();
             location.reload();
         }
 

@@ -28,6 +28,9 @@
             </div>
              <input type="submit" class="btn btn-primary" value="Submit">
          </form>
+         <div class="text-center">
+            <a href="/login.html">Login</a>
+        </div>
     </div>
 
     <script>
@@ -59,7 +62,7 @@
         }
 
         function checkError(res) {
-            if (!res.ok) throw new Error(res.reason);
+            if (res.status !== 'success') throw new Error(res.reason);
             return res;
         }
 
@@ -70,6 +73,11 @@
             alert.setAttribute('role', 'alert');
             alert.textContent = message;
             registerForm.appendChild(alert);
+        }
+
+        function processData(json) {
+            sessionStorage.setItem('user', JSON.stringify(json.user));
+            location.replace('/login.html');
         }
 
     </script>
